@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ContactForm from './ContactForm/ContactForm'
 import ContactList from './ContactList/ContactList'
+import Filter from './Filter/Filter'
 
 class App extends Component{
   state = {
@@ -43,7 +44,7 @@ class App extends Component{
           <ContactForm contacts={contacts} />
 
           <h2>Contacts</h2>
-          {/* <Filter /> */}
+          <Filter contacts={contacts}/>
           <ContactList contacts={contacts} onDeleteContact={this.deleteCoontact }/>
         </div>
       </>          
