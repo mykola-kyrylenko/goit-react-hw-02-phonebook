@@ -3,7 +3,12 @@
 
 const Filter = ({contacts})=>{
     return (
-        <p>Filter!!!!!!!!</p>
+        <div>
+            <label htmlFor="">
+                <input type="text" className=""
+            name="filter"/>
+            </label>
+        </div>
     )
 }
 
