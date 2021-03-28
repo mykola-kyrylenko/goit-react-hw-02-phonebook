@@ -30,24 +30,32 @@ class App extends Component {
     this.setState(({ contacts }) => ({
       contacts: [newContact, ...contacts],
     }));
-
-    
   };
 
-  handleInputChange = event => {
-    console.log(event.currentTarget.value);
-  }
+  handleCheckUniqueContact = (name) => {
+    const { contacts } = this.state
+    const isExistContact = !!contacts.find((contact) => contact.name === name)
+    isExistContact && alert('Contact is already exist')
 
-  handleDuplicateContacts = (name, number) => {
-    const { contacts } = this.state;
-    const isDuplicate = !!contacts.find(contact => contact.name === name && contact.number === number)
-    isDuplicate && alert(`${name} is already in contacts.`)
-    return !isDuplicate
-  }
+    return !isExistContact
+   };
+  
+  handleChangeFilter = filter => {
+    this.setState({ filter});
+  };
 
+   getVisibleContacts = () => {
+    const { contacts, filter } = this.state;
+    // const normalizedFilter = filter.toLowerCase();
 
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(filter.toLowerCase()),
+    );
+   };
+  
   render() {
-    const {contacts} = this.state
+    const {contacts, filter } = this.state
+    const visibleContacts = this.getVisibleContacts();
 
     return (
       <>
@@ -57,16 +65,20 @@ class App extends Component {
             contacts={contacts}
             // onSubmit={this.handleAddContact}
             onChange={this.handleInputChange}
-            addContact={this.handleAddContact} />
-
+            addContact={this.handleAddContact}
+            onCheck={this.handleDuplicateContacts}
+            uniqueName={this.handleCheckUniqueContact}         
+          />
           <h2>Contacts</h2>
-          <Filter contacts={contacts}/>
+          <Filter
+            filter={filter}
+            onChange={this.handleChangeFilter} />
           <ContactList
-            contacts={contacts}
+            contacts={visibleContacts}
             onDeleteContact={this.deleteCoontact}
-            onCheck={this.handleDuplicateContacts} />
+          />
         </div>
-      </>          
+      </>
     );
   };
 }

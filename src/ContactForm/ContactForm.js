@@ -21,18 +21,34 @@ class ContactForm extends Component {
         e.preventDefault();
 
         const { name, number } = this.state
-        const{addContact} = this.props
+        const { addContact } = this.props
+        
+        const isValidated = this.validator()
+        if (!isValidated) return
+
         console.log(`
         name: ${name}
         number: ${number}
         `);
 
-        addContact({id:uuidv4(), name, number})
+        addContact({ id: uuidv4(), name, number })
         
-
         // this.props.onSubmit({ ...this.state });
         this.reset();
     };
+
+    validator = () => {
+        const { name, number } = this.state
+        const { uniqueName } = this.props
+        
+        if (!name || !number) {
+            alert('Не все поля заполнен')
+            return false
+        }
+
+        return uniqueName(name)
+    };
+
 
   reset = () => {
     this.setState({ ...INITIAL_STATE });
@@ -43,7 +59,11 @@ class ContactForm extends Component {
 
         return (
             <div>
-                <form onSubmit={this.handleSubmit} className={s.ContactForm__container}>
+                <form
+                    onSubmit={this.handleSubmit}
+                    className={s.ContactForm__container}
+                    // onCheckUnique={this.uniqueName}
+                >
                     <p>Name</p>
                     <label htmlFor="">
                         <input
@@ -55,6 +75,7 @@ class ContactForm extends Component {
                             required
                             value={name}
                             onChange={this.handleChange}
+                            
                             // id={uuidv4()}
                         />
                     </label>
@@ -74,7 +95,10 @@ class ContactForm extends Component {
                         />
                     </label>
       
-                    <button type="submit" className={s.ContactList__add__button} >Add contact</button>
+                    <button
+                        type="submit"
+                        className={s.ContactList__add__button}
+                    >Add contact</button>
                 </form>
             </div>
         );
